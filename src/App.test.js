@@ -46,4 +46,56 @@ describe('<App />', () => {
 
     expect(display.text()).toBe('1');
   });
+
+  test('clicking button decrements counter', () => {
+    const wrapper = renderComponent();
+
+    const incrementButton = findByDataTestAttr(wrapper, 'increment-button');
+    incrementButton.simulate('click');
+    incrementButton.simulate('click');
+    incrementButton.simulate('click');
+
+    const decrementButton = findByDataTestAttr(wrapper, 'decrement-button');
+    decrementButton.simulate('click');
+
+    const display = findByDataTestAttr(wrapper, 'counter-display');
+
+    expect(display.text()).toBe('2');
+  });
+
+  it('should not be able to decrement counter bellow zero', () => {
+    const wrapper = renderComponent();
+
+    const decrementButton = findByDataTestAttr(wrapper, 'decrement-button');
+    decrementButton.simulate('click');
+
+    const display = findByDataTestAttr(wrapper, 'counter-display');
+
+    expect(display.text()).toBe('0');
+  });
+
+  it('should show an error message when try to decrement counter bellow zero', () => {
+    const wrapper = renderComponent();
+
+    const decrementButton = findByDataTestAttr(wrapper, 'decrement-button');
+    decrementButton.simulate('click');
+
+    const errorMessage = findByDataTestAttr(wrapper, 'error-message');
+
+    expect(errorMessage.text()).toBe('cannot decrement bellow zero.');
+  });
+
+  it('should clear error message on increment', () => {
+    const wrapper = renderComponent();
+
+    const decrementButton = findByDataTestAttr(wrapper, 'decrement-button');
+    decrementButton.simulate('click');
+
+    const incrementButton = findByDataTestAttr(wrapper, 'increment-button');
+    incrementButton.simulate('click');
+
+    const errorMessage = findByDataTestAttr(wrapper, 'error-message');
+
+    expect(errorMessage.text()).toBe('');
+  });
 });
